@@ -43,22 +43,47 @@ class LaunchRequestHandler(AbstractRequestHandler):
             .response
         )
 
-
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class SetFavoriteColorIntentHandler(AbstractRequestHandler):
+    """Handler for SetFavoriteColorIntent."""
 
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
+        return ask_utils.is_intent_name("SetFavoriteColorIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = HELLO_MSG
+        slots = handler_input.request_envelope.request.intent.slots
+        print("---- Printing Slots ----")
+        # print(slots)
+        logging.debug(slots)
+        fav_color = slots['color_name'].value
+        handler_input.attributes_manager.session_attributes["fav_color"] = fav_color
+
+        speak_output = f"You said your favorite color is {fav_color}. I will now remember this."
 
         return (
             handler_input.response_builder
             .speak(speak_output)
-            # .ask("add a reprompt if you want to keep the session open for the user to respond")
+            .ask(speak_output)
+            .response
+        )
+
+class GetFavoriteColorIntentHandler(AbstractRequestHandler):
+    """Handler for GetFavoriteColorIntent."""
+
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("GetFavoriteColorIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        fav_color = handler_input.attributes_manager.session_attributes["fav_color"]
+        speak_output = f"Your favorite color is {fav_color}"
+
+        return (
+            handler_input.response_builder
+            .speak(f"{speak_output}. You can tell me your favorite color again, if you like")
+            .ask("You can tell me your favorite color again, if you like")
             .response
         )
 
@@ -181,7 +206,8 @@ class GenericRequestInterceptor(AbstractRequestInterceptor):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(SetFavoriteColorIntentHandler())
+sb.add_request_handler(GetFavoriteColorIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
