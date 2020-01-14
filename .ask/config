@@ -1,30 +1,18 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "amzn1.ask.skill.e621f228-4164-4c8e-8846-61b0678fe6c7",
+      "skill_id": "",
       "resources": {
         "lambda": [
           {
+            "functionName": "",
             "alexaUsage": [
               "custom/default"
             ],
-            "arn": "arn:aws:lambda:us-east-1:838764131764:function:ask-custom-shallow-dump-default",
-            "awsRegion": "us-east-1",
-            "codeUri": "lambda/py/lambda_upload",
-            "functionName": "ask-custom-shallow-dump-default",
-            "handler": "hello_world.handler",
-            "revisionId": "8c58c32d-c64d-4395-8c3b-67008224f2a0",
-            "runtime": "python3.6"
+            "runtime": "python3.6",
+            "handler": "hello_world.handler"
           }
-        ],
-        "manifest": {
-          "eTag": "ac44fd8fc71ac65f4cf2c9f716f64249"
-        },
-        "interactionModel": {
-          "en-US": {
-            "eTag": "6713530dcfa327d43b8af211fbb03359"
-          }
-        }
+        ]
       },
       "was_cloned": false,
       "merge": {}
